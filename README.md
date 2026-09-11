@@ -1,179 +1,155 @@
 # Northline Mini ERP + CRM Operations Portal
 
-A full-stack Mini ERP + CRM for wholesale/distribution operations. The assignment requires authentication/roles, customer CRM, product/inventory management, sales challans, REST APIs, validation, and deployment documentation.
+A full-stack Mini ERP + CRM application designed for wholesale and distribution operations. The system provides role-based authentication, customer relationship management, product and inventory management, sales challan processing, stock tracking, and REST APIs.
 
-## Current implementation
+## 🚀 Live Demo
 
-- Node.js + TypeScript + Express REST API
-- PostgreSQL + Prisma
-- JWT authentication with Admin, Sales, Warehouse and Accounts roles
-- Customer CRUD, search/filter, detail and follow-up history
-- Product CRUD and stock movement audit log
-- Inventory stock IN/OUT with non-negative stock protection
-- Sales challan creation, draft/confirmed/cancelled workflow
-- Automatic challan numbers
-- Product snapshot stored on challan items
-- React + TypeScript + Vite responsive admin UI
-- Dashboard, customers, products, inventory and challans
+👉 **[Open Northline Mini ERP + CRM](https://naren2023.github.io/mini-erp-crm/)**
 
-The case study specifically requires that confirmed challans reduce stock and that insufficient stock returns an error; the backend already implements this transactionally.
+### Production Services
 
-## Run in VS Code
+| Component | Platform | URL |
+|---|---|---|
+| Frontend | GitHub Pages | [Live Application](https://naren2023.github.io/mini-erp-crm/) |
+| Backend API | Render | [Backend API](https://mini-erp-crm-mwin.onrender.com) |
+| Database | Render PostgreSQL | Private production database |
 
-### 1. Prerequisites
+---
 
-Install:
-- Node.js 20+ (LTS recommended)
-- Docker Desktop
-- VS Code
+## 📌 Project Overview
 
-### 2. Open the project
+Northline Mini ERP + CRM is a web-based business operations portal for wholesale/distribution workflows.
 
-Extract the zip and open the `mini-erp-crm` folder in VS Code.
+The application centralizes:
 
-Open two terminals in VS Code.
+- Customer management
+- Customer follow-ups
+- Product management
+- Inventory management
+- Stock movement tracking
+- Sales challan management
+- Role-based access control
+- Dashboard monitoring
+- REST API integration
 
-### 3. Start PostgreSQL
+The application follows a client-server architecture where the React frontend communicates with the Express REST API, which uses Prisma ORM to interact with PostgreSQL.
 
-From the project root:
+---
 
-```bash
-docker compose up -d
-```
+## ✨ Key Features
 
-Check:
+### 🔐 Authentication & Role-Based Access
 
-```bash
-docker ps
-```
+- JWT-based authentication
+- Secure login
+- Protected API routes
+- Role-based authorization
+- Four supported roles:
+  - Admin
+  - Sales
+  - Warehouse
+  - Accounts
 
-You should see `mini-erp-crm-db` running.
+### 👥 Customer CRM
 
-### 4. Backend setup
+- Create customers
+- Update customers
+- Delete customers
+- Search customers
+- Filter customers
+- View customer details
+- Customer status management
+- Customer type management
+- Follow-up history
+- Follow-up date and notes
 
-Terminal 1:
+### 📦 Product Management
 
-```bash
-cd backend
-npm install
-npm run prisma:generate
-npm run prisma:migrate
-npm run prisma:seed
-npm run dev
-```
+- Create products
+- Edit products
+- View products
+- Product SKU management
+- Product category management
+- Product pricing
+- Product stock information
+- Active/inactive product status
 
-API: http://localhost:4000
-Health check: http://localhost:4000/health
+### 📊 Inventory Management
 
-### 5. Frontend setup
+- View current stock
+- Stock IN movements
+- Stock OUT movements
+- Stock movement history
+- Inventory audit trail
+- Prevention of negative stock
 
-Terminal 2:
+### 🧾 Sales Challans
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+- Create sales challans
+- Add multiple products to a challan
+- Specify product quantities
+- Automatic challan number generation
+- Draft status
+- Confirmed status
+- Cancelled status
+- Product snapshot stored with challan items
+- Stock reduction after confirmation
+- Insufficient-stock validation
+- Transactional stock updates
 
-Open the Vite URL shown in the terminal, normally:
+### 📈 Dashboard
 
-http://localhost:5173
+- Business overview
+- Customer statistics
+- Product statistics
+- Inventory information
+- Challan information
+- Role-aware navigation
 
-## Demo logins
+### 🌐 REST API
 
-Password for all accounts: `Password123!`
+The backend exposes RESTful APIs for:
 
-- Admin: `admin@example.com`
-- Sales: `sales@example.com`
-- Warehouse: `warehouse@example.com`
-- Accounts: `accounts@example.com`
+- Authentication
+- Dashboard
+- Customers
+- Products
+- Inventory
+- Sales challans
 
-## Important demo flow
+Protected APIs use JWT Bearer authentication.
 
-1. Login as Sales.
-2. Open **Customers** and inspect a customer.
-3. Open **Products** / **Inventory** and inspect stock.
-4. Open **Sales Challans**.
-5. Create a draft challan with multiple products.
-6. Open the challan and click **Confirm**.
-7. Stock is reduced only after confirmation.
-8. Try confirming the seeded draft `CH-20260911-0001`: it requests 8 laptops while seeded stock is 5. The API should reject it with an insufficient-stock message and stock must remain unchanged.
+---
 
-## Role access
+# 🏗️ System Architecture
 
-- Admin: full access
-- Sales: customers, products/inventory viewing, challans; can create/update customers and challans
-- Warehouse: product management and stock adjustments; product/inventory access
-- Accounts: read-oriented access to customers/products/challans
-
-## Environment variables
-
-Backend `.env`:
-
-```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/mini_erp_crm?schema=public
-JWT_SECRET=change-this-to-a-long-random-secret
-PORT=4000
-NODE_ENV=development
-FRONTEND_ORIGIN=http://localhost:5173
-```
-
-Frontend `.env`:
-
-```env
-VITE_API_URL=http://localhost:4000/api
-```
-
-For production, replace the JWT secret and database URL with secure deployment values.
-
-## API examples
-
-- `POST /api/auth/login`
-- `GET /api/auth/me`
-- `GET /api/dashboard`
-- `GET /api/customers`
-- `POST /api/customers`
-- `GET /api/products`
-- `POST /api/products/:id/stock`
-- `GET /api/products/:id/movements`
-- `GET /api/challans`
-- `POST /api/challans`
-- `POST /api/challans/:id/confirm`
-- `POST /api/challans/:id/cancel`
-
-All protected APIs use `Authorization: Bearer <JWT>`.
-
-## Build checks
-
-Backend:
-
-```bash
-cd backend
-npm run build
-npm test
-```
-
-Frontend:
-
-```bash
-cd frontend
-npm run build
-```
-
-## Deployment
-
-The case study accepts free hosting such as Vercel/Netlify/Render for frontend, Render/Railway/Fly.io for backend, and Supabase/Neon/Render Postgres for the database. AWS is optional bonus rather than a requirement.
-
-Before deployment:
-1. Create a production PostgreSQL database.
-2. Set backend `DATABASE_URL`, `JWT_SECRET`, `PORT`, and `FRONTEND_ORIGIN`.
-3. Run `npm run prisma:deploy` in the backend deployment.
-4. Set frontend `VITE_API_URL` to the deployed API `/api` URL.
-5. Build and deploy frontend.
-6. Test all four roles and the insufficient-stock flow.
-
-## Known limitations / next polish
-
-- Invoice module is not required by the supplied case study's core module list.
-- PDF invoice export, S3 image upload, Docker CI/CD and GitHub Actions are optional bonuses.
-- Add automated API/Postman collection and production monitoring before final submission.
+```text
+                    ┌─────────────────────────────┐
+                    │       GitHub Pages          │
+                    │                             │
+                    │ React + TypeScript + Vite   │
+                    │ Tailwind CSS                │
+                    └──────────────┬──────────────┘
+                                   │
+                                   │ HTTPS REST API
+                                   ▼
+                    ┌─────────────────────────────┐
+                    │          Render             │
+                    │                             │
+                    │ Node.js + Express + TS      │
+                    │ JWT Authentication          │
+                    │ REST API                    │
+                    └──────────────┬──────────────┘
+                                   │
+                                   │ Prisma ORM
+                                   ▼
+                    ┌─────────────────────────────┐
+                    │     Render PostgreSQL       │
+                    │                             │
+                    │ Users                       │
+                    │ Customers                   │
+                    │ Products                    │
+                    │ Stock Movements             │
+                    │ Challans                    │
+                    │ Challan Items               │
+                    └─────────────────────────────┘
